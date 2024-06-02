@@ -19,11 +19,17 @@ Install these dependencies if they are not already present.
 
 ## 3. Download and Install Zabbix Repository
 
-Add the official Zabbix repository to your system:
+Add the official Zabbix repository to your system and update the package and dependancy information:
 
 ```bash
 sudo wget https://repo.zabbix.com/zabbix/6.4/ubuntu/pool/main/z/zabbix-release/zabbix-release_6.4-1+ubuntu20.04_all.deb
+```
+
+```bash
 sudo dpkg -i zabbix-release_6.4-1+ubuntu20.04_all.deb
+```
+
+```bash
 sudo apt update
 ```
 
@@ -37,23 +43,29 @@ Check the status of the server and agent:
 
 ```bash
 sudo service zabbix-server status
+```
+
+```bash
 sudo service zabbix-agent status
 ```
 
 *Note: The server won’t be active yet; however, the agent status will show as active.*
 
-## 5. Configure MySQL Database
+## 5. Configure MySQL Server and Database
 
-Check if the MySQL database is running:
+Check if the MySQL is running:
 
 ```bash
 sudo service mysql status
 ```
 
-Install MySQL Server:
+Install MySQL Server and check status whether mysql server and agent are running:
 
 ```bash
 sudo apt install mysql-server
+```
+
+```bash
 sudo service mysql status
 ```
 
@@ -61,45 +73,85 @@ Log in to MySQL and set up the Zabbix database and user:
 
 ```bash
 mysql
+```
 
+```bash
 create database zabbix character set utf8mb4 collate utf8mb4_bin;
-create user zabbix@localhost identified by 'password';
-grant all privileges on zabbix.* to zabbix@localhost;
+```
 
+```bash
+create user zabbix@localhost identified by 'password';
+```
+
+```bash
+grant all privileges on zabbix.* to zabbix@localhost;
+```
+
+
+## 6. Import the Zabbix schema:
+
+Since August 2022, we need to temporarily enable the log_bin_trust_function_creators option to import the zabbix schema
+
+```bash
 set global log_bin_trust_function_creators = 1;
+```
+
+```bash
 quit;
 ```
 
-Import the Zabbix schema:
+we can now proceed with importing the zabbix schema and disable the log_bin_trust_function_creators option
 
 ```bash
 zcat /usr/share/zabbix-sql-scripts/mysql/server.sql.gz | mysql --default-character-set=utf8mb4 -uzabbix -p zabbix
-mysql
+```
 
+```bash
+mysql
+```
+
+```bash
 set global log_bin_trust_function_creators = 0;
+```
+
+```bash
 quit;
 ```
 
-## 6. Edit Configuration Files
+## 6. Edit Configuration Files and add the following line
 
 Edit the Zabbix server configuration file and set the `DBPassword` property:
 
 ```bash
 sudo nano /etc/zabbix/zabbix_server.conf
-
-# Add the following line
-DBPassword=password
 ```
+
+DBPassword=password
+
 
 ## 7. Perform MySQL Checks
 
 ```bash
 mysql
+```
 
+```bash
 show databases;
+```
+
+```bash
 use zabbix;
+```
+
+```bash
 show tables;
+```
+
+```bash
 select * from users;
+```
+
+```bash
 quit;
 ```
 
@@ -109,6 +161,9 @@ Start the Zabbix Server process and check if it is active:
 
 ```bash
 sudo service zabbix-server start
+```
+
+```bash
 sudo service zabbix-server status
 ```
 
@@ -126,11 +181,6 @@ Restart the Apache2 service:
 sudo service apache2 restart
 ```
 
-Visit your new Zabbix Server at:
-
-```
-http://your-server-ip-address/zabbix
-```
 
 ## 10. Access Zabbix Web Interface
 
@@ -152,6 +202,9 @@ If you want to monitor the local server, start the Zabbix agent:
 
 ```bash
 sudo systemctl start zabbix-agent
+```
+
+```bash
 sudo systemctl enable zabbix-agent
 ```
 
