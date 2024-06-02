@@ -212,4 +212,3 @@ sudo systemctl enable zabbix-agent
 
 Log in to the Zabbix web interface using the admin credentials you set during the setup.
 
-Congratulations! You have successfully installed and configured Zabbix on Ubuntu 20.04.6 Focal.
