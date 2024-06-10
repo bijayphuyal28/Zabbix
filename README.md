@@ -10,7 +10,7 @@ The following configurations are documented in this repository:
 
 # Usage
 
-You can use this documentation as a reference while performing Zabbix Installation Guide on Ubuntu 20.04.6 Focal. This document has step-by-step procedures for performing Zabbix Installation Guide on Ubuntu 20.04.6 Focal.
+You can use this documentation as a reference while performing Zabbix Installation on Ubuntu 20.04.6 Focal. This document has step-by-step procedures for performing Zabbix Installation on Ubuntu 20.04.6 Focal.
 
 To use this repository, you can simply browse and follow the documentation.
 
